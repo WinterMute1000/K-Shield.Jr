@@ -6,10 +6,20 @@ process_check=0
 RHOSTS="/.rhosts"
 IS_SAFE=1
 
-if [ -z '`ps -ef | grep -e "login|shell|exec"`' ] && 
-   [ -z '`systemctl status |grep -e ^[512-514]$`' ] && 
-   [ -z '`ss -ano | grep -e ^[512-514]$`' ]; then
+if [ -z '`ps -ef | grep -v "grep "| egrep "login|shell|exec"`' ] && 
+   [ -z '`systemctl status | egrep [512-514]`' ] && 
+   [ -z '`ss -ano | egrep [512-514]`' ]; then
 	process_check=1
+else
+	if [ -f "/etc/xinetd.d/rlogin" ] && [ '`cat /etc/xinetd.d/rlogin | grep -v '^#'` | grep -i disable | grep -i no' ]; then
+		process_check=1
+	fi
+	if [ -f "/etc/xinetd.d/rsh" ] && [ '`cat /etc/xinetd.d/rsh | grep -v '^#'` | grep -i disable | grep -i no' ]; then
+		process_check=1
+	fi
+	if [ -f "/etc/xinetd.d/rexec" ] && [ '`cat /etc/xinetd.d/rexec | grep -v '^#'` | grep -i disable | grep -i no' ]; then
+		process_check=1
+	fi
 fi
 
 if [ $process_check -eq 1 ]; then	
