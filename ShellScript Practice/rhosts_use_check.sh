@@ -5,6 +5,7 @@ echo "check rhosts service(login,shell,exec)"
 process_check=0
 RHOSTS="/.rhosts"
 IS_SAFE=1
+users=`sudo cat /etc/passwd`
 
 if [ -z '`ps -ef | grep -v "grep "| egrep "login|shell|exec"`' ] && 
    [ -z '`systemctl status | egrep [512-514]`' ] && 
@@ -53,7 +54,7 @@ else
 	echo "$HOSTS_EQUIV isn't exist." >> $RESULT_FILE 2>&1
 fi
 
-while read user
+for user in $users;
 do
 	user_id="`echo $user | awk -F":" '{ print $1}'`"
 	user_rhosts="`echo $user | awk -F":" '{ print $6}'`$RHOSTS"
