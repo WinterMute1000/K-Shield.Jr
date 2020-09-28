@@ -4,7 +4,7 @@ HOSTS_EQUIV="/etc/hosts.equiv"
 echo "check rhosts service(login,shell,exec)"
 process_check=0
 RHOSTS="/.rhosts"
-IS_SAFE=1
+is_safe=1
 users=`sudo cat /etc/passwd`
 
 if [ -z '`ps -ef | grep -v "grep "| egrep "login|shell|exec"`' ] && 
@@ -25,7 +25,7 @@ fi
 
 if [ $process_check -eq 1 ]; then	
        	echo "You are use login or shell or exec process." >> $RESULT_FILE 2>&1
-	IS_SAFE=0
+	is_safe=0
 else
 	echo "login or shell or exec process not execute." >> $RESULT_FILE 2>&1
 fi
@@ -33,7 +33,7 @@ fi
 if [ -f $HOSTS_EQUIV ]; then
 	if [ '`stat -c '%U' "$HOSTS_EQUIV"`' !="root" ]; then
 		echo "$HOSTS_EQUIV\'s owner isn't root." >> $RESULT_FILE 2>&1
-		IS_SAFE=0
+		is_safe=0
 	fi
 
 	hosts_equiv_perm=`stat -c '%a' "$HOSTS_EQUIV"`
@@ -48,7 +48,7 @@ if [ -f $HOSTS_EQUIV ]; then
 		echo "$HOSTS_EQUIV\'s permition is safe." >> $RESULT_FILE 2>&1
 	else
 		echo "$HOSTS_EQUIV\'s permition isn't safe." >> $RESULT_FILE 2>&1
-	        IS_SAFE=0	
+	        is_safe=0	
        	fi
 else
 	echo "$HOSTS_EQUIV isn't exist." >> $RESULT_FILE 2>&1
@@ -61,7 +61,7 @@ do
         if [ -f $user_rhosts ]; then
 	    if [ '`stat -c '%U' "$user_rhosts"`' !="$user_id" ]; then
 		echo "$user_rhosts\'s owner isn't $user_id." >> $RESULT_FILE 2>&1
-		IS_SAFE=0
+		is_safe=0
 	fi
 
 	    rhosts_perm=`stat -c '%a' "$user_rhosts"`
@@ -76,7 +76,7 @@ do
 		    echo "$user_rhosts\'s permition is safe." >> $RESULT_FILE 2>&1
 	    else
 		    echo "$user_rhosts\'s permition isn't safe." >> $RESULT_FILE 2>&1
-	            IS_SAFE=0	    
+	            is_safe=0	    
        	    fi
     else
 	    echo "$user_rhosts isn't exist." >> $RESULT_FILE 2>&1
@@ -87,7 +87,7 @@ echo " " >> $RESULT_FILE 2>&1
 echo " " >> $RESULT_FILE 2>&1
 echo " " >> $RESULT_FILE 2>&1
 
-if [ "$IS_SAFE" -eq 1 ]; then
+if [ "$is_safe" -eq 1 ]; then
 	echo "Your computer pass rhosts test." >> $RESULT_FILE 2>&1
 
 else
@@ -96,4 +96,4 @@ fi
 
 unset RESULT_FILE
 unset HOSTS_EQUIV
-unset IS_SAFE
+unset is_safe
