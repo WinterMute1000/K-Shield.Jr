@@ -17,9 +17,9 @@ do
 
        home_directory_perm=`stat -c '%a' "$user_rhosts"`
        home_directory_group_perm=`echo "$rhosts_perm" | awk '{ print substr($0,2,1) }'`
-       home_directory_order_perm=`echo "$rhosts_perm" | awk '{ print substr($0,3,1) }'`
+       home_directory_other_perm=`echo "$rhosts_perm" | awk '{ print substr($0,3,1) }'`
 
-       if [ $home_directory_group_perm & 2 -ge 1 ] || [ $home_directory_group_perm & 2 -ge 1]; then
+       if [ $home_directory_group_perm & 2 -ge 1 ] || [ $home_directory_other_perm & 2 -ge 1]; then
 	       echo "$user_id's Home Directory($user_home_directory) permission has problem." >> $RESULT_FILE 2>&1
 	       is_safe=0
        fi
